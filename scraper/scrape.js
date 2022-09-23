@@ -11,7 +11,7 @@ const gogoBase3 = "https://ww3.gogoanime2.org/home";
 const gogoajax = "https://ajax.gogo-load.com/";
 const episodeListPage = "https://ajax.gogo-load.com/ajax/load-list-episode";
 const goloadStreaming = "https://goload.pro/streaming.php";
-
+const NineAnimeHome = "https://ww1.9anime2.com"
 const USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
 const headerOption = { headers: { "User-Agent": USER_AGENT } };
@@ -271,7 +271,7 @@ export const fetchPopular = async ({ list = [], type = 1 }) => {
 
 export const fetchAnimixAllAnime = async ({ list = [], page, limit }) => {
   try {
-    if (!page && !limit) {
+    if (!page || !limit) {
       page = 1
       limit = 30
     }
@@ -643,3 +643,20 @@ export const fetchGogoDayTopAnimes = async ({ list = [] }) => {
     console.log(error);
   }
 };
+
+export const Fetch9AnimeAll = async ({ list = [], page = 1 }) => {
+  try {
+    const res = await axios.get(NineAnimeHome+`/home/${page}`)
+    const $ = load(res.data)
+    $(".container > aside > section > div > ul > li").each((li, el) => {
+      list.push({
+        animeThumb: NineAnimeHome  + $(el).find(".poster.tooltipstered > img").attr("src"),
+        AnimeLink: NineAnimeHome + $(el).find(".poster.tooltipstered").attr("href"),
+        AnimeTitle: $(el).find(".name").text()
+      })
+    })
+    return list
+  } catch (error) {
+    console.error()
+  }
+}

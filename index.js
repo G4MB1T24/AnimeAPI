@@ -18,6 +18,7 @@ import {
   fetchAnimixEpisodeSource,
   fetchGogoanimeEpisodeSource,
   fetchGogoDayTopAnimes,
+  Fetch9AnimeAll,
 } from "./scraper/scrape.js";
 
 app.use(cors());
@@ -64,9 +65,9 @@ app.get("/popular", async (req, res) => {
 });
 
 app.get("/animix/all", async (req, res) => {
-  const page = req.query.page 
-  const limit = req.query.limit 
-  const data = await fetchAnimixAllAnime({page: page , limit: limit });
+  const page = req.query.page;
+  const limit = req.query.limit;
+  const data = await fetchAnimixAllAnime({ page: page, limit: limit });
   res.json(data).status(200);
 });
 
@@ -117,6 +118,11 @@ app.get("/gogoanime/watch/:episodeId", async (req, res) => {
 
 app.get("/gogoanime/daytop", async (req, res) => {
   const data = await fetchGogoDayTopAnimes({});
+  res.send(data);
+});
+app.get("/9anime/all", async (req, res) => {
+  const page = req.query.page;
+  const data = await Fetch9AnimeAll({ page: page });
   res.send(data);
 });
 //Start the web-server
